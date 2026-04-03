@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  cmdb:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cmdb
+    ports:
+      - "8088:8088"
+    volumes:
+      - cmdb_data:/app/data
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - cmdb-net
+
+volumes:
+  cmdb_data:
+    driver: local
+
+networks:
+  cmdb-net:
+    driver: bridge
