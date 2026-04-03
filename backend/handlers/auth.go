@@ -15,6 +15,17 @@ import (
 	"github.com/go-ldap/ldap/v3"
 )
 
+// Login 用户登录
+// @Summary      用户登录
+// @Description  本地账号或 LDAP 账号登录，返回 JWT token
+// @Tags         认证
+// @Accept       json
+// @Produce      json
+// @Param        body body object{username=string,password=string} true "登录信息"
+// @Success      200  {object}  object{token=string,user=object}
+// @Failure      400  {object}  object{error=string}
+// @Failure      401  {object}  object{error=string}
+// @Router       /login [post]
 func Login(c *gin.Context) {
 	var req struct {
 		Username string `json:"username"`

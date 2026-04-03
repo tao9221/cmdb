@@ -1,13 +1,26 @@
 package main
 
+// @title           CMDB 智能运维平台 API
+// @version         1.0
+// @description     CMDB 后端接口文档，包含服务器管理、机房管理、用户管理、告警配置等接口。
+// @host            localhost:8088
+// @BasePath        /api
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @description 格式: Bearer {token}
+
 import (
 	"cmdb-backend/database"
 	"cmdb-backend/handlers"
 	"cmdb-backend/middleware"
+	_ "cmdb-backend/docs"
 	"log"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func main() {
@@ -92,6 +105,9 @@ func main() {
 			admin.POST("/settings/test-mail", handlers.TestMail)
 		}
 	}
+
+	// Swagger UI
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	log.Println("CMDB后端启动在 :8088")
 	r.Run(":8088")

@@ -9,6 +9,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// ListServers 获取服务器列表
+// @Summary      服务器列表
+// @Description  支持关键字搜索、状态筛选、机柜筛选
+// @Tags         服务器
+// @Security     BearerAuth
+// @Produce      json
+// @Param        keyword    query  string  false  "搜索关键字"
+// @Param        status     query  string  false  "状态: online/offline"
+// @Param        cabinet_id query  string  false  "机柜ID，unassigned=未分配"
+// @Success      200  {array}   models.Server
+// @Router       /servers [get]
 func ListServers(c *gin.Context) {
 	keyword := c.Query("keyword")
 	status := c.Query("status")
@@ -52,6 +63,15 @@ func ListServers(c *gin.Context) {
 	c.JSON(http.StatusOK, servers)
 }
 
+// GetServer 获取服务器详情
+// @Summary      服务器详情
+// @Tags         服务器
+// @Security     BearerAuth
+// @Produce      json
+// @Param        id   path  int  true  "服务器ID"
+// @Success      200  {object}  models.Server
+// @Failure      404  {object}  object{error=string}
+// @Router       /servers/{id} [get]
 func GetServer(c *gin.Context) {
 	id := c.Param("id")
 	var server models.Server
@@ -62,7 +82,16 @@ func GetServer(c *gin.Context) {
 	c.JSON(http.StatusOK, server)
 }
 
-// 手动创建服务器（仅管理员）
+// CreateServer 手动创建服务器
+// @Summary      创建服务器
+// @Tags         服务器
+// @Security     BearerAuth
+// @Accept       json
+// @Produce      json
+// @Param        body  body  object  true  "服务器信息"
+// @Success      200   {object}  models.Server
+// @Failure      400   {object}  object{error=string}
+// @Router       /servers [post]
 func CreateServer(c *gin.Context) {
 	role, _ := c.Get("role")
 	if role != "admin" {
@@ -125,6 +154,17 @@ func CreateServer(c *gin.Context) {
 	c.JSON(http.StatusOK, server)
 }
 
+// UpdateServer 更新服务器信息
+// @Summary      更新服务器
+// @Tags         服务器
+// @Security     BearerAuth
+// @Accept       json
+// @Produce      json
+// @Param        id    path  int     true  "服务器ID"
+// @Param        body  body  object  true  "更新内容"
+// @Success      200   {object}  models.Server
+// @Failure      404   {object}  object{error=string}
+// @Router       /servers/{id} [put]
 func UpdateServer(c *gin.Context) {
 	role, _ := c.Get("role")
 	if role != "admin" {
@@ -197,6 +237,13 @@ func UpdateServer(c *gin.Context) {
 	c.JSON(http.StatusOK, server)
 }
 
+// DeleteServer 删除服务器
+// @Summary      删除服务器
+// @Tags         服务器
+// @Security     BearerAuth
+// @Param        id  path  int  true  "服务器ID"
+// @Success      200  {object}  object{message=string}
+// @Router       /servers/{id} [delete]
 func DeleteServer(c *gin.Context) {
 	role, _ := c.Get("role")
 	if role != "admin" {

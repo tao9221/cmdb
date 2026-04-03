@@ -1,0 +1,342 @@
+basePath: /api
+definitions:
+  models.Cabinet:
+    properties:
+      col:
+        type: string
+      created_at:
+        type: string
+      data_center_id:
+        type: integer
+      deleted_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      pos_x:
+        type: integer
+      pos_y:
+        type: integer
+      row:
+        type: string
+      servers:
+        items:
+          $ref: '#/definitions/models.Server'
+        type: array
+      updated_at:
+        type: string
+    type: object
+  models.DataCenter:
+    properties:
+      cabinets:
+        items:
+          $ref: '#/definitions/models.Cabinet'
+        type: array
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      desc:
+        type: string
+      id:
+        type: integer
+      location:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.Server:
+    properties:
+      agent_version:
+        type: string
+      cabinet:
+        $ref: '#/definitions/models.Cabinet'
+      cabinet_id:
+        type: integer
+      cpu_cores:
+        type: integer
+      cpu_model:
+        type: string
+      cpu_usage:
+        type: number
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      disk_total:
+        type: integer
+      disk_used:
+        type: integer
+      hostname:
+        type: string
+      id:
+        type: integer
+      ip:
+        type: string
+      last_report:
+        type: string
+      manual:
+        type: boolean
+      mem_total:
+        type: integer
+      mem_used:
+        type: integer
+      model:
+        type: string
+      net_in:
+        description: 入流量 bytes/s
+        type: integer
+      net_out:
+        description: 出流量 bytes/s
+        type: integer
+      os:
+        type: string
+      remark:
+        type: string
+      slot:
+        description: 机柜位号，0表示未指定
+        type: integer
+      status:
+        type: string
+      updated_at:
+        type: string
+      vendor:
+        type: string
+      warranty_end:
+        description: 维保到期日，手动填写
+        type: string
+    type: object
+host: localhost:8088
+info:
+  contact: {}
+  description: CMDB 后端接口文档，包含服务器管理、机房管理、用户管理、告警配置等接口。
+  title: CMDB 智能运维平台 API
+  version: "1.0"
+paths:
+  /datacenters:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.DataCenter'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: 机房列表
+      tags:
+      - 机房
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: 本地账号或 LDAP 账号登录，返回 JWT token
+      parameters:
+      - description: 登录信息
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            password:
+              type: string
+            username:
+              type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              token:
+                type: string
+              user:
+                type: object
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      summary: 用户登录
+      tags:
+      - 认证
+  /servers:
+    get:
+      description: 支持关键字搜索、状态筛选、机柜筛选
+      parameters:
+      - description: 搜索关键字
+        in: query
+        name: keyword
+        type: string
+      - description: '状态: online/offline'
+        in: query
+        name: status
+        type: string
+      - description: 机柜ID，unassigned=未分配
+        in: query
+        name: cabinet_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Server'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: 服务器列表
+      tags:
+      - 服务器
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 服务器信息
+        in: body
+        name: body
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Server'
+        "400":
+          description: Bad Request
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建服务器
+      tags:
+      - 服务器
+  /servers/{id}:
+    delete:
+      parameters:
+      - description: 服务器ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              message:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除服务器
+      tags:
+      - 服务器
+    get:
+      parameters:
+      - description: 服务器ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Server'
+        "404":
+          description: Not Found
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 服务器详情
+      tags:
+      - 服务器
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 服务器ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 更新内容
+        in: body
+        name: body
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Server'
+        "404":
+          description: Not Found
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新服务器
+      tags:
+      - 服务器
+  /stats:
+    get:
+      description: 返回 CPU/内存/磁盘/网络流量 Top 20 在线服务器
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 资源统计
+      tags:
+      - 统计
+securityDefinitions:
+  BearerAuth:
+    description: '格式: Bearer {token}'
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

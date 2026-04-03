@@ -26,6 +26,13 @@ func adminCheck(c *gin.Context) bool {
 	return false
 }
 
+// ListDataCenters 获取机房列表
+// @Summary      机房列表
+// @Tags         机房
+// @Security     BearerAuth
+// @Produce      json
+// @Success      200  {array}  models.DataCenter
+// @Router       /datacenters [get]
 func ListDataCenters(c *gin.Context) {
 	var dcs []models.DataCenter
 	database.DB.Preload("Cabinets").Find(&dcs)

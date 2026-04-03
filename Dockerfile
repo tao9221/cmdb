@@ -17,7 +17,10 @@ RUN apk add --no-cache gcc musl-dev
 WORKDIR /app/backend
 COPY backend/go.mod backend/go.sum ./
 RUN go mod download
+# 安装 swag 并生成 API 文档
+RUN go install github.com/swaggo/swag/cmd/swag@latest
 COPY backend/ ./
+RUN swag init --generalInfo main.go --output docs
 RUN CGO_ENABLED=1 GOOS=linux go build -o cmdb-backend .
 
 # 阶段3：最终镜像

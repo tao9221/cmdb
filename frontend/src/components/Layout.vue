@@ -44,6 +44,10 @@
             <span class="nav-icon">⚙</span>
             <span class="nav-label">系统设置</span>
           </router-link>
+          <a :href="`${apiBase}/swagger/index.html`" target="_blank" class="nav-item" :title="collapsed ? 'API 文档' : ''">
+            <span class="nav-icon">📋</span>
+            <span class="nav-label">API 文档</span>
+          </a>
         </template>
       </nav>
 
@@ -75,6 +79,7 @@ const router = useRouter()
 const username = computed(() => localStorage.getItem('username') || 'admin')
 const isAdmin = computed(() => localStorage.getItem('role') === 'admin')
 const collapsed = ref(localStorage.getItem('sidebar_collapsed') === '1')
+const apiBase = `${location.protocol}//${location.hostname}:8088`
 
 // 初始化主题
 const savedTheme = localStorage.getItem('theme') || 'dark'

@@ -9,6 +9,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetStats 资源统计 Top20
+// @Summary      资源统计
+// @Description  返回 CPU/内存/磁盘/网络流量 Top 20 在线服务器
+// @Tags         统计
+// @Security     BearerAuth
+// @Produce      json
+// @Success      200  {object}  object
+// @Router       /stats [get]
 func GetStats(c *gin.Context) {
 	var servers []models.Server
 	database.DB.Where("status = ?", "online").Find(&servers)
