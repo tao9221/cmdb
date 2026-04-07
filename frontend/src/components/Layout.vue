@@ -34,6 +34,10 @@
           <span class="nav-icon">📊</span>
           <span class="nav-label">资源统计</span>
         </router-link>
+        <router-link to="/batch" class="nav-item" :title="collapsed ? '批量操作' : ''">
+          <span class="nav-icon">⚡</span>
+          <span class="nav-label">批量操作</span>
+        </router-link>
         <template v-if="isAdmin">
           <div class="nav-divider"></div>
           <router-link to="/users" class="nav-item" :title="collapsed ? '用户管理' : ''">

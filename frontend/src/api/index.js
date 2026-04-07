@@ -65,3 +65,10 @@ export const setUserAccess = (id, data) => api.put(`/admin/users/${id}/access`, 
 export const getSettings = () => api.get('/admin/settings')
 export const saveSettings = (data) => api.post('/admin/settings', data)
 export const testMail = () => api.post('/admin/settings/test-mail')
+
+// 批量操作
+export const batchExec = (data) => api.post('/batch/exec', data)
+export const batchScript = (data) => api.post('/batch/script', data)
+export const batchUpload = (formData) => api.post('/batch/upload', formData, {
+  headers: { 'Content-Type': 'multipart/form-data' }
+})

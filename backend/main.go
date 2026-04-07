@@ -91,6 +91,11 @@ func main() {
 		// 资源统计
 		api.GET("/stats", handlers.GetStats)
 
+		// 批量操作
+		api.POST("/batch/exec", handlers.BatchExec)
+		api.POST("/batch/script", handlers.BatchScript)
+		api.POST("/batch/upload", handlers.BatchUpload)
+
 		// 用户管理 + 系统设置（仅管理员）
 		admin := api.Group("/admin", handlers.AdminOnly)
 		{

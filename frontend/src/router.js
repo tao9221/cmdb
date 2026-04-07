@@ -10,6 +10,7 @@ import SSHKeys from './views/SSHKeys.vue'
 import Users from './views/Users.vue'
 import Stats from './views/Stats.vue'
 import Settings from './views/Settings.vue'
+import BatchOps from './views/BatchOps.vue'
 
 const routes = [
   { path: '/login', component: Login },
@@ -25,6 +26,7 @@ const routes = [
       { path: 'servers', component: Servers },
       { path: 'servers/:id', component: ServerDetail },
       { path: 'stats', component: Stats },
+      { path: 'batch', component: BatchOps },
       { path: 'sshkeys', component: SSHKeys, meta: { adminOnly: true } },
       { path: 'users', component: Users, meta: { adminOnly: true } },
       { path: 'settings', component: Settings, meta: { adminOnly: true } },
