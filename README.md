@@ -107,7 +107,7 @@ docker compose version
 
 ```bash
 # 下载代码到服务器
-cd opt
+cd /opt
 git clone https://github.com/tao9221/cmdb.git
 
 cd /opt/cmdb
