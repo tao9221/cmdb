@@ -6,8 +6,6 @@
 
 ## 系统截图
 
-> 将截图放入 `docs/screenshots/` 目录后，图片将在此处展示。
-
 | 概览仪表盘 | 服务器管理 |
 |:---:|:---:|
 | ![概览](docs/screenshots/overview.png) | ![服务器](docs/screenshots/servers.png) |
@@ -108,8 +106,9 @@ docker compose version
 ### 一键启动
 
 ```bash
-# 上传项目到服务器
-scp -r cmdb user@服务器IP:/opt/cmdb
+# 下载代码到服务器
+cd opt
+git clone https://github.com/tao9221/cmdb.git
 
 cd /opt/cmdb
 
